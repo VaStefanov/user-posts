@@ -1,13 +1,17 @@
-import { Flex } from 'antd';
+import { Flex, Row } from 'antd';
 import User from './User';
 import { useAppSelector } from '../redux-hooks';
 import Loading from './Loading';
 
 const Users = () => {
-  const { users } = useAppSelector((store) => store.users);
+  const { users, isLoading } = useAppSelector((store) => store.users);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!users) {
-    return <Loading />;
+    return <Row style={{ padding: '10px' }}>User has no posts</Row>;
   }
 
   return (

@@ -41,7 +41,6 @@ const UserPost = ({ title, body, userId, id }: Post) => {
   };
 
   const onDeletePost = () => {
-    customFetch.delete(`posts/${userId}`);
     deletePost(id as string);
   };
 

@@ -35,8 +35,8 @@ const UserForm = ({ user }: UserFormProps) => {
       name={`user_form-${userData.username}`}
       form={form}
       initialValues={userFields}
-      onFinish={(e) => {
-        setUserData(e);
+      onFinish={(formValues) => {
+        setUserData(formValues);
         setIsEditing(false);
       }}
       variant={!isEditing ? 'borderless' : 'outlined'}
@@ -49,7 +49,7 @@ const UserForm = ({ user }: UserFormProps) => {
           }
           return (
             <Col span={8} key={`${userData[field as keyof UserFormFields]}-${id}`} style={formStyle}>
-              <Form.Item label={field.includes('_') ? field.replace('_', ' ') : field} name={field} layout='vertical'>
+              <Form.Item label={field.replace('_', ' ')} name={field} layout='vertical'>
                 <Input name={field} style={{ pointerEvents: !isEditing ? 'none' : 'all' }} required={requiredFields.includes(field)} />
               </Form.Item>
             </Col>

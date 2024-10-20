@@ -11,9 +11,6 @@ export const flattenUserData = (obj: Record<string, any>): UserFormFields => {
         return acc;
       }
       acc[key] = obj[key];
-      if (key === 'username') {
-        key = 'user_name';
-      }
     }
     return acc;
   }, {});

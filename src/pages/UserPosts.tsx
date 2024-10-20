@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUserPostsContext } from '../context/context';
 import { UserForm, UserPost } from '../components';
 import { Flex, Row, theme } from 'antd';
