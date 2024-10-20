@@ -18,4 +18,5 @@ const Users = () => {
     </Flex>
   );
 };
+
 export default Users;

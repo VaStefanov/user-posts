@@ -39,6 +39,8 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
   }, []);
 
   const deletePost = (id: string): void => {
+    console.log(id);
+
     const newUserPosts = userPosts?.filter((post: Post) => post.id !== +id);
     setUserPosts(newUserPosts);
   };

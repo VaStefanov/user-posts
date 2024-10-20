@@ -4,20 +4,20 @@ import { UserForm, UserPost } from '../components';
 import { Flex, Row, theme } from 'antd';
 import Loading from '../components/Loading';
 import Error from './Error';
-import { Post } from '../context/types';
 
 const UserPosts = () => {
   const { userPosts, userData, isLoading } = useUserPostsContext();
-  const { id } = useParams();
   const { token } = theme.useToken();
 
   if (isLoading) {
     return <Loading />;
   }
 
-  if (!userData || !userPosts) {
+  if (!userData) {
     return <Error />;
   }
+
+  const noUserPosts = <Row style={{ padding: '10px' }}>User has no posts</Row>;
 
   return (
     <Row align='middle' justify='center'>
@@ -29,13 +29,16 @@ const UserPosts = () => {
           <UserForm user={userData} />
         </Row>
         <Row align='top' justify='center' style={{ height: '100%', padding: '25px' }}>
-          {userPosts.map((post, index) => {
-            const { title, body } = post;
-            return <UserPost title={title} body={body} id={id} key={`${title}-${index}`} />;
-          })}
+          {userPosts.length === 0
+            ? noUserPosts
+            : userPosts.map((post, index) => {
+                const { title, body, id, userId } = post;
+                return <UserPost title={title} body={body} userId={userId} id={id} key={`${title}-${index}`} />;
+              })}
         </Row>
       </Flex>
     </Row>
   );
 };
+
 export default UserPosts;

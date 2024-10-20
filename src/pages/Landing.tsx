@@ -10,10 +10,12 @@ const Landing = () => {
   useEffect(() => {
     dispatch(getAllUsers());
   }, []);
+
   return (
     <Row align='middle' justify='center' style={{ height: '100%' }}>
       <Users />
     </Row>
   );
 };
+
 export default Landing;

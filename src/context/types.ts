@@ -1,5 +1,5 @@
 export type Post = {
-  userId?: number;
+  userId?: string;
   id: number | string | undefined;
   title: string;
   body: string;

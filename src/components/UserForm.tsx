@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { UserData } from '../features/usersSlice';
-import { flatten } from '../utils/flatten';
+import { flattenUserData } from '../utils/flattenUserData';
 import { UserFormFields } from '../context/types';
 
 type UserFormProps = {
@@ -15,7 +15,7 @@ const UserForm = ({ user }: UserFormProps) => {
   const [form] = Form.useForm();
   const { id } = user;
   const params = useParams();
-  const userFields: UserFormFields = flatten(user);
+  const userFields: UserFormFields = flattenUserData(user);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(userFields);
 
@@ -25,8 +25,8 @@ const UserForm = ({ user }: UserFormProps) => {
   };
 
   const resetData = () => {
-    setUserData(userFields);
-    form.setFieldsValue(userFields);
+    setUserData(userData);
+    form.setFieldsValue(userData);
     setIsEditing(false);
   };
 
@@ -35,18 +35,21 @@ const UserForm = ({ user }: UserFormProps) => {
       name={`user_form-${userData.username}`}
       form={form}
       initialValues={userFields}
-      onFinish={() => setIsEditing(false)}
+      onFinish={(e) => {
+        setUserData(e);
+        setIsEditing(false);
+      }}
       variant={!isEditing ? 'borderless' : 'outlined'}
       style={{ padding: '25px' }}
     >
       <Row gutter={30}>
-        {Object.keys(userData).map((field: any) => {
+        {Object.keys(userData).map((field: string) => {
           if (field === 'id') {
             return null;
           }
           return (
             <Col span={8} key={`${userData[field as keyof UserFormFields]}-${id}`} style={formStyle}>
-              <Form.Item label={field} name={field} layout='vertical'>
+              <Form.Item label={field.includes('_') ? field.replace('_', ' ') : field} name={field} layout='vertical'>
                 <Input name={field} style={{ pointerEvents: !isEditing ? 'none' : 'all' }} required={requiredFields.includes(field)} />
               </Form.Item>
             </Col>
@@ -74,4 +77,5 @@ const UserForm = ({ user }: UserFormProps) => {
     </Form>
   );
 };
+
 export default UserForm;

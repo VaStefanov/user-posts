@@ -5,7 +5,7 @@ import customFetch from '../utils/axios';
 import { useUserPostsContext } from '../context/context';
 import { Post } from '../context/types';
 
-const UserPost = ({ title, body, id }: Post) => {
+const UserPost = ({ title, body, userId, id }: Post) => {
   const [titleText, setTitleText] = useState(title);
   const [bodyText, setBodyText] = useState(body);
   const [isEditing, setIsEditing] = useState(false);
@@ -27,11 +27,11 @@ const UserPost = ({ title, body, id }: Post) => {
 
   const onEditPost = () => {
     customFetch
-      .put(`posts/${id}`, {
+      .put(`posts/${userId}`, {
         id,
         title: titleText,
         body: bodyText,
-        userId: id,
+        userId: userId,
       })
       .then((response) => setBodyText(response.data.body))
       .catch((err) => {
@@ -41,7 +41,7 @@ const UserPost = ({ title, body, id }: Post) => {
   };
 
   const onDeletePost = () => {
-    customFetch.delete(`posts/${id}`);
+    customFetch.delete(`posts/${userId}`);
     deletePost(id as string);
   };
 
@@ -58,6 +58,7 @@ const UserPost = ({ title, body, id }: Post) => {
       <DeleteOutlined key='trash' />
     </Popconfirm>,
   ];
+
   return (
     <Row style={{ padding: '10px' }}>
       <Card title={isEditing ? titleForm : titleText} actions={actions} style={{ width: 600 }}>
@@ -66,4 +67,5 @@ const UserPost = ({ title, body, id }: Post) => {
     </Row>
   );
 };
+
 export default UserPost;

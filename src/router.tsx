@@ -18,11 +18,7 @@ export const router = createBrowserRouter([
     errorElement: <Error />,
   },
   {
-    path: '/error',
-    element: <Error />,
-  },
-  {
-    path: '*',
+    path: '/*',
     element: <Error />,
   },
 ]);

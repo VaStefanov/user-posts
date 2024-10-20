@@ -4,6 +4,7 @@ import customFetch from '../utils/axios';
 
 export const getAllUsersThunk = async (thunkAPI: GetThunkAPI<AsyncThunkConfig>) => {
   const url = 'users';
+
   try {
     const resp = await customFetch.get(url);
     return resp.data;

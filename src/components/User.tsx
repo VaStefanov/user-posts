@@ -8,11 +8,6 @@ type UserProps = {
   user: UserData;
 };
 
-export type field = {
-  for: string;
-  value: string;
-};
-
 const User = ({ user }: UserProps) => {
   const { token } = theme.useToken();
 
@@ -34,6 +29,7 @@ const User = ({ user }: UserProps) => {
       },
     ];
   };
+
   return (
     <section>
       <Collapse
@@ -45,4 +41,5 @@ const User = ({ user }: UserProps) => {
     </section>
   );
 };
+
 export default User;
