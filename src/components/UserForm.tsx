@@ -15,8 +15,6 @@ const UserForm = (props: UserFormProps) => {
   const { token } = theme.useToken();
   const { id } = props.user;
   const params = useParams();
-  console.log(!!params.id);
-
   const userFields = flatten(props.user);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(userFields);
@@ -39,7 +37,7 @@ const UserForm = (props: UserFormProps) => {
       initialValues={userFields}
       onFinish={() => setIsEditing(false)}
       variant={!isEditing ? 'borderless' : 'outlined'}
-      style={{ background: token.colorFillAlter, padding: '25px' }}
+      style={{ padding: '25px' }}
     >
       <Row gutter={30}>
         {Object.keys(userFields).map((field) => {

@@ -1,10 +1,11 @@
-import { createContext, useContext } from 'react';
-import useAxios from '../utils/useAxios';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import customFetch from '../utils/axios';
 
 type UserPostsState = {
   userData: any;
   userPosts: any;
+  deletePost: any;
   isLoading: boolean;
 };
 
@@ -15,12 +16,33 @@ type UserPostsProviderProps = {
 };
 
 export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
-  const { id } = useParams();
-  
-  const userData = useAxios(`users/${id}`);
-  const userPosts = useAxios(`posts?userId=${id}`);
+  const { id }: any = useParams();
+  const [userData, setUserData] = useState();
+  const [userPosts, setUserPosts] = useState<any>();
+  const [isUserDataLoading, setIsUserDataLoading] = useState(true);
+  const [isUserPostsLoading, setIsUserPostsLoading] = useState(true);
+
+  useEffect(() => {
+    customFetch(`users/${id}`)
+      .then((res) => setUserData(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => setIsUserDataLoading(false));
+  }, []);
+
+  useEffect(() => {
+    customFetch(`posts?userId=${id}`)
+      .then((res) => setUserPosts(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => setIsUserPostsLoading(false));
+  }, []);
+
+  const deletePost = (id: any) => {
+    const newUserPosts = userPosts.filter((post: any) => post.id !== +id);
+    setUserPosts(newUserPosts);
+  };
+
   return (
-    <UserPostsContext.Provider value={{ userData, userPosts, isLoading: userData.loading || userPosts.loading }}>
+    <UserPostsContext.Provider value={{ userData, userPosts, deletePost, isLoading: isUserDataLoading || isUserPostsLoading }}>
       {children}
     </UserPostsContext.Provider>
   );

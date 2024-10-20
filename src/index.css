@@ -54,6 +54,18 @@ label {
   background: #309711;
 }
 
+.back {
+  margin: 10px 15px;
+  padding: 10px 25px;
+  border-color: #4096ff;
+  color: #000;
+}
+
+.back:hover {
+  background-color: #4096ff;
+  color: #fff;
+}
+
 .posts-link:hover {
   color: #4096ff;
   border-color: #4096ff;
@@ -62,4 +74,39 @@ label {
 
 .edit-data {
   background: #f3bb20;
+}
+
+.error-page {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-page h3 {
+  margin-bottom: 0.5rem;
+}
+
+.error-page p {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #000;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  width: 6rem;
+  height: 6rem;
+  border: 5px solid #829ab1;
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spinner 2s linear infinite;
 }

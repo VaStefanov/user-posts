@@ -2,12 +2,13 @@ import { Card, Form, Input, Popconfirm, Row } from 'antd';
 import { DeleteOutlined, EditOutlined, CheckOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import customFetch from '../utils/axios';
+import { useUserPostsContext } from '../context/context';
 
 const UserPost = ({ title, body, id }: any) => {
   const [titleText, setTitleText] = useState(title);
   const [bodyText, setBodyText] = useState(body);
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
+  const { deletePost } = useUserPostsContext();
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
@@ -40,7 +41,7 @@ const UserPost = ({ title, body, id }: any) => {
 
   const onDeletePost = () => {
     customFetch.delete(`posts/${id}`);
-    setIsDeleted(true);
+    deletePost(id);
   };
 
   const actions: React.ReactNode[] = [
@@ -56,12 +57,12 @@ const UserPost = ({ title, body, id }: any) => {
       <DeleteOutlined key='trash' />
     </Popconfirm>,
   ];
-  return !isDeleted ? (
+  return (
     <Row style={{ padding: '10px' }}>
       <Card title={isEditing ? titleForm : titleText} actions={actions} style={{ width: 600 }}>
         {isEditing ? bodyForm : <p>{bodyText}</p>}
       </Card>
     </Row>
-  ) : null;
+  );
 };
 export default UserPost;
