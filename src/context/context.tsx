@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import customFetch from '../utils/axios';
+import { UserData } from '../features/usersSlice';
+import { Post } from './types';
 
 type UserPostsState = {
-  userData: any;
-  userPosts: any;
-  deletePost: any;
+  userData: UserData;
+  userPosts: Post[];
+  deletePost: (id: string) => void;
   isLoading: boolean;
 };
 
@@ -16,9 +18,9 @@ type UserPostsProviderProps = {
 };
 
 export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
-  const { id }: any = useParams();
-  const [userData, setUserData] = useState();
-  const [userPosts, setUserPosts] = useState<any>();
+  const { id } = useParams();
+  const [userData, setUserData] = useState<UserData>({} as UserData);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [isUserDataLoading, setIsUserDataLoading] = useState(true);
   const [isUserPostsLoading, setIsUserPostsLoading] = useState(true);
 
@@ -36,8 +38,8 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
       .finally(() => setIsUserPostsLoading(false));
   }, []);
 
-  const deletePost = (id: any) => {
-    const newUserPosts = userPosts.filter((post: any) => post.id !== +id);
+  const deletePost = (id: string): void => {
+    const newUserPosts = userPosts?.filter((post: Post) => post.id !== +id);
     setUserPosts(newUserPosts);
   };
 

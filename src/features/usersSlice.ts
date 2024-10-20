@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, GetThunkAPI } from '@reduxjs/toolkit';
 import { AsyncThunkConfig } from '../store';
 import { getAllUsersThunk } from './usersThunk';
 
-export type User = {
+export type UserData = {
   id: number;
   name: string;
   username: string;
@@ -28,7 +28,7 @@ export type User = {
 
 type UsersState = {
   isLoading: boolean;
-  users: User[] | null;
+  users: UserData[] | null;
 };
 
 const initialState: UsersState = {

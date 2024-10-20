@@ -2,10 +2,10 @@ import { Collapse, theme } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { CSSProperties } from 'react';
 import UserForm from './UserForm';
-import { User as UserType } from '../features/usersSlice';
+import { UserData } from '../features/usersSlice';
 
 type UserProps = {
-  user: UserType;
+  user: UserData;
 };
 
 export type field = {

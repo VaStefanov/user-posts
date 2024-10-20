@@ -1,21 +1,21 @@
-import { Button, Col, Form, Input, Row, Space, theme } from 'antd';
+import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { User } from '../features/usersSlice';
+import { UserData } from '../features/usersSlice';
 import { flatten } from '../utils/flatten';
+import { UserFormFields } from '../context/types';
 
 type UserFormProps = {
-  user: User;
+  user: UserData;
 };
 
-const requiredFields = ['user_name', 'email', 'street', 'suite', 'city'];
+const requiredFields = ['username', 'email', 'street', 'suite', 'city'];
 
-const UserForm = (props: UserFormProps) => {
+const UserForm = ({ user }: UserFormProps) => {
   const [form] = Form.useForm();
-  const { token } = theme.useToken();
-  const { id } = props.user;
+  const { id } = user;
   const params = useParams();
-  const userFields = flatten(props.user);
+  const userFields: UserFormFields = flatten(user);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(userFields);
 
@@ -32,7 +32,7 @@ const UserForm = (props: UserFormProps) => {
 
   return (
     <Form
-      name={`user_form-${userData.name}`}
+      name={`user_form-${userData.username}`}
       form={form}
       initialValues={userFields}
       onFinish={() => setIsEditing(false)}
@@ -40,13 +40,13 @@ const UserForm = (props: UserFormProps) => {
       style={{ padding: '25px' }}
     >
       <Row gutter={30}>
-        {Object.keys(userFields).map((field) => {
+        {Object.keys(userData).map((field: any) => {
           if (field === 'id') {
             return null;
           }
           return (
-            <Col span={8} key={`${userFields[field]}-${id}`} style={formStyle}>
-              <Form.Item label={field.includes('_') ? field.replace('_', ' ') : field} name={field} layout='vertical'>
+            <Col span={8} key={`${userData[field as keyof UserFormFields]}-${id}`} style={formStyle}>
+              <Form.Item label={field} name={field} layout='vertical'>
                 <Input name={field} style={{ pointerEvents: !isEditing ? 'none' : 'all' }} required={requiredFields.includes(field)} />
               </Form.Item>
             </Col>

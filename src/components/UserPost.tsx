@@ -3,8 +3,9 @@ import { DeleteOutlined, EditOutlined, CheckOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import customFetch from '../utils/axios';
 import { useUserPostsContext } from '../context/context';
+import { Post } from '../context/types';
 
-const UserPost = ({ title, body, id }: any) => {
+const UserPost = ({ title, body, id }: Post) => {
   const [titleText, setTitleText] = useState(title);
   const [bodyText, setBodyText] = useState(body);
   const [isEditing, setIsEditing] = useState(false);
@@ -41,7 +42,7 @@ const UserPost = ({ title, body, id }: any) => {
 
   const onDeletePost = () => {
     customFetch.delete(`posts/${id}`);
-    deletePost(id);
+    deletePost(id as string);
   };
 
   const actions: React.ReactNode[] = [
