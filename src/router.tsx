@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { Landing, Error, UserPosts } from './pages';
+import { UserPostsProvider } from './context/context';
 
 export const router = createBrowserRouter([
   {
@@ -9,7 +10,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/:id',
-    element: <UserPosts />,
+    element: (
+      <UserPostsProvider>
+        <UserPosts />
+      </UserPostsProvider>
+    ),
     errorElement: <Error />,
   },
 ]);

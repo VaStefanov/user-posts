@@ -21,3 +21,45 @@ div#root {
 div.app {
   height: 100%;
 }
+
+label {
+  text-transform: capitalize;
+}
+
+.btn {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  height: 32px;
+  padding: 4px 15px;
+  border-radius: 6px;
+  outline: none;
+  position: relative;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.posts-link {
+  background: #309711;
+}
+
+.posts-link:hover {
+  color: #4096ff;
+  border-color: #4096ff;
+  background: #ffffff;
+}
+
+.edit-data {
+  background: #f3bb20;
+}

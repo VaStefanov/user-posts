@@ -1,12 +1,18 @@
 import { Flex } from 'antd';
 import User from './User';
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+import { useAppSelector } from '../redux-hooks';
+
 const Users = () => {
+  const { users } = useAppSelector((store) => store.users);
+  if (!users) {
+    return <h1>No users</h1>;
+  }
+
   return (
-    <Flex vertical style={{ width: '600px' }}>
-      {arr.map((a, index) => (
-        <User key={index} />
-      ))}
+    <Flex vertical style={{ width: '800px' }}>
+      {users.map((user) => {
+        return <User user={user} />;
+      })}
     </Flex>
   );
 };

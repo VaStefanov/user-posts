@@ -1,30 +1,38 @@
-import { Collapse, CollapseProps, theme } from 'antd';
+import { Collapse, theme } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import { CSSProperties } from 'react';
+import UserForm from './UserForm';
+import { User as UserType } from '../features/usersSlice';
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+type UserProps = {
+  user: UserType;
+};
 
-const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelStyle) => [
-  {
-    key: '1',
-    label: 'This is panel header 1',
-    children: <p>{text}</p>,
-    style: panelStyle,
-  },
-];
+export type field = {
+  for: string;
+  value: string;
+};
 
-const User = () => {
+const User = ({ user }: UserProps) => {
   const { token } = theme.useToken();
 
   const panelStyle: React.CSSProperties = {
+    maxWidth: 'none',
     marginBottom: 24,
     background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
     border: 'none',
+  };
+
+  const getItems = (panelStyle: CSSProperties) => {
+    return [
+      {
+        key: user.id,
+        label: user.name,
+        children: <UserForm user={user} />,
+        style: panelStyle,
+      },
+    ];
   };
   return (
     <section>
