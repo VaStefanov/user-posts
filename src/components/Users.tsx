@@ -6,12 +6,12 @@ import Loading from './Loading';
 const Users = () => {
   const { users, isLoading } = useAppSelector((store) => store.users);
 
-  if (isLoading) {
+  if (!users.length && isLoading) {
     return <Loading />;
   }
 
-  if (!users) {
-    return <Row style={{ padding: '10px' }}>User has no posts</Row>;
+  if (!users.length) {
+    return <Row style={{ padding: '10px' }}>No users</Row>;
   }
 
   return (

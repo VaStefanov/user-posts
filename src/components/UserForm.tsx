@@ -1,9 +1,10 @@
 import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
-import { UserData } from '../features/usersSlice';
+import { editUser, UserData } from '../features/usersSlice';
 import { flattenUserData } from '../utils/flattenUserData';
 import { UserFormFields } from '../context/types';
+import { useAppDispatch } from '../redux-hooks';
 
 type UserFormProps = {
   user: UserData;
@@ -14,6 +15,7 @@ const requiredFields = ['username', 'email', 'street', 'suite', 'city'];
 const UserForm = ({ user }: UserFormProps) => {
   const [form] = Form.useForm();
   const { id } = user;
+  const dispatch = useAppDispatch();
   const params = useParams();
   const userFields: UserFormFields = flattenUserData(user);
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +38,9 @@ const UserForm = ({ user }: UserFormProps) => {
       form={form}
       initialValues={userFields}
       onFinish={(formValues) => {
-        setUserData(formValues);
+        const obj = { id, ...formValues };
+
+        dispatch(editUser(obj));
         setIsEditing(false);
       }}
       variant={!isEditing ? 'borderless' : 'outlined'}
