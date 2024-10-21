@@ -29,14 +29,14 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
       .then((res) => setUserData(res.data))
       .catch((err) => console.error(err))
       .finally(() => setIsUserDataLoading(false));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     customFetch(`posts?userId=${id}`)
       .then((res) => setUserPosts(res.data))
       .catch((err) => console.error(err))
       .finally(() => setIsUserPostsLoading(false));
-  }, []);
+  }, [id]);
 
   const deletePost = (id: string): void => {
     customFetch.delete(`posts/${id}`);

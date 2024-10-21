@@ -26,6 +26,7 @@ const UserPost = ({ title, body, userId, id }: Post) => {
   );
 
   const onEditPost = () => {
+    if (!isEditing) return;
     customFetch
       .put(`posts/${userId}`, {
         id,

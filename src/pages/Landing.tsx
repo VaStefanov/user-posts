@@ -9,7 +9,7 @@ const Landing = () => {
 
   useEffect(() => {
     dispatch(getAllUsers());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Row align='middle' justify='center' style={{ height: '100%' }}>
