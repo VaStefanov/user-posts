@@ -1,10 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
-import usersReducer from './features/usersSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./rootReducer";
 
 export const store = configureStore({
-  reducer: {
-    users: usersReducer,
-  },
+  reducer: rootReducer,
 });
 
 export type AppStore = typeof store;

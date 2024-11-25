@@ -1,6 +1,8 @@
-import { UserFormFields } from '../context/types';
+import { UserFormFields } from '../shared/types';
 
 export const flattenUserData = (obj: Record<string, any>): UserFormFields => {
+  console.log('called');
+
   return Object.keys(obj).reduce((acc: any, key) => {
     if (typeof obj[key] === 'object' && obj[key] !== null) {
       Object.assign(acc, flattenUserData(obj[key]));

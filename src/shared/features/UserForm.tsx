@@ -1,10 +1,10 @@
 import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { editUser, UserData } from '../features/usersSlice';
-import { flattenUserData } from '../utils/flattenUserData';
-import { UserFormFields } from '../context/types';
-import { useAppDispatch } from '../redux-hooks';
+import { useMemo, useState } from 'react';
+import { flattenUserData } from '../../utils/flattenUserData';
+import { editUser } from '../slices/usersSlice';
+import { UserData, UserFormFields } from '../types';
+import { useAppDispatch } from '../../redux-hooks';
 
 type UserFormProps = {
   user: UserData;
@@ -17,7 +17,10 @@ const UserForm = ({ user }: UserFormProps) => {
   const { id } = user;
   const dispatch = useAppDispatch();
   const params = useParams();
-  const userFields: UserFormFields = flattenUserData(user);
+  const userFields: UserFormFields = useMemo(
+    () => flattenUserData(user),
+    [user]
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState(userFields);
 
@@ -52,9 +55,23 @@ const UserForm = ({ user }: UserFormProps) => {
             return null;
           }
           return (
-            <Col span={8} key={`${userData[field as keyof UserFormFields]}-${id}`} style={formStyle}>
-              <Form.Item label={field.replace('_', ' ')} name={field} layout='vertical'>
-                <Input name={field} style={{ pointerEvents: !isEditing ? 'none' : 'all' }} required={requiredFields.includes(field)} />
+            <Col
+              span={8}
+              key={`${userData[field as keyof UserFormFields]}-${id}`}
+              style={formStyle}
+            >
+              <Form.Item
+                label={field.replace('_', ' ')}
+                name={field}
+                layout='vertical'
+                rules={[{ required: requiredFields.includes(field) }]}
+                style={{ minHeight: '35px' }}
+              >
+                <Input
+                  name={field}
+                  style={{ pointerEvents: !isEditing ? 'none' : 'all' }}
+                  required={requiredFields.includes(field)}
+                />
               </Form.Item>
             </Col>
           );
@@ -62,7 +79,12 @@ const UserForm = ({ user }: UserFormProps) => {
       </Row>
       <div style={{ textAlign: 'right', marginTop: '15px' }}>
         <Space size='small'>
-          <Button htmlType='submit' disabled={isEditing} onClick={() => setIsEditing(true)} className='btn edit-data'>
+          <Button
+            htmlType='submit'
+            disabled={isEditing}
+            onClick={() => setIsEditing(true)}
+            className='btn edit-data'
+          >
             Edit
           </Button>
           <Button type='primary' htmlType='submit' disabled={!isEditing}>
@@ -72,7 +94,7 @@ const UserForm = ({ user }: UserFormProps) => {
             Revert
           </Button>
           {!params.id && (
-            <Link to={`/${id}`} className='btn posts-link'>
+            <Link to={`/userPosts/${id}`} className='btn posts-link'>
               See posts
             </Link>
           )}
