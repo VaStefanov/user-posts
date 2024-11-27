@@ -1,27 +1,24 @@
-import { createContext, useContext, useEffect } from "react";
-import { useParams } from "react-router";
-import { UserData } from "../../shared/types";
-import { useAppSelector } from "../../redux-hooks";
-import { selectUserById } from "../../shared/slices/usersSlice";
-import { UserPosts } from "./types";
-import { useGetUserPosts } from "./hooks/useGetUserPosts";
-
-type UserPostsState = {
-  userData: UserData;
-  userPosts: UserPosts[];
-  isLoading: boolean;
-};
+import { createContext, useContext, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../../redux-hooks';
+import { fetchUsers, selectUserById } from '../Users/usersSlice';
+import { useGetUserPosts } from './hooks/useGetUserPosts';
+import { UserPostsState, UserPostsProviderProps } from './types';
 
 const UserPostsContext = createContext<UserPostsState | undefined>(undefined);
-
-type UserPostsProviderProps = {
-  children: React.ReactNode | JSX.Element;
-};
 
 export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
   const { id } = useParams();
   const userData = useAppSelector(selectUserById(Number(id)));
   const { userPosts, isLoading } = useGetUserPosts(Number(id));
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!userData) {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, userData]);
 
   if (!userData || !userPosts) return null;
 
@@ -42,7 +39,7 @@ export const useUserPostsContext = () => {
   const context = useContext(UserPostsContext);
 
   if (context === undefined) {
-    throw new Error("useUserPostsContext must be use within UserPostsProvider");
+    throw new Error('useUserPostsContext must be use within UserPostsProvider');
   }
 
   return context;

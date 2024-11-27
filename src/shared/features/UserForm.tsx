@@ -1,8 +1,7 @@
 import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
-import { flattenUserData } from '../../utils/flattenUserData';
-import { editUser } from '../slices/usersSlice';
+import { memo, useState } from 'react';
+import { editUser } from '../../pages/Users/usersSlice';
 import { UserData, UserFormFields } from '../types';
 import { useAppDispatch } from '../../redux-hooks';
 
@@ -12,17 +11,23 @@ type UserFormProps = {
 
 const requiredFields = ['username', 'email', 'street', 'suite', 'city'];
 
-const UserForm = ({ user }: UserFormProps) => {
+const UserForm = memo(({ user }: UserFormProps) => {
   const [form] = Form.useForm();
-  const { id } = user;
+  const { id, username, email } = user;
+  const { street, suite, city } = user.address;
+  const fields: UserFormFields = {
+    username,
+    email,
+    street,
+    suite,
+    city,
+  };
+
   const dispatch = useAppDispatch();
   const params = useParams();
-  const userFields: UserFormFields = useMemo(
-    () => flattenUserData(user),
-    [user]
-  );
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState(userFields);
+  const [changesMade, setChangesMade] = useState(false);
+  const [userData, setUserData] = useState(fields);
 
   const formStyle: React.CSSProperties = {
     maxWidth: 'none',
@@ -33,33 +38,29 @@ const UserForm = ({ user }: UserFormProps) => {
     setUserData(userData);
     form.setFieldsValue(userData);
     setIsEditing(false);
+    setChangesMade(false);
   };
 
   return (
     <Form
-      name={`user_form-${userData.username}`}
+      name={username}
       form={form}
-      initialValues={userFields}
+      initialValues={fields}
       onFinish={(formValues) => {
         const obj = { id, ...formValues };
 
         dispatch(editUser(obj));
         setIsEditing(false);
+        setChangesMade(false);
       }}
       variant={!isEditing ? 'borderless' : 'outlined'}
       style={{ padding: '25px' }}
+      onChange={() => setChangesMade(true)}
     >
       <Row gutter={30}>
         {Object.keys(userData).map((field: string) => {
-          if (field === 'id') {
-            return null;
-          }
           return (
-            <Col
-              span={8}
-              key={`${userData[field as keyof UserFormFields]}-${id}`}
-              style={formStyle}
-            >
+            <Col span={8} key={field} style={formStyle}>
               <Form.Item
                 label={field.replace('_', ' ')}
                 name={field}
@@ -80,17 +81,16 @@ const UserForm = ({ user }: UserFormProps) => {
       <div style={{ textAlign: 'right', marginTop: '15px' }}>
         <Space size='small'>
           <Button
-            htmlType='submit'
-            disabled={isEditing}
-            onClick={() => setIsEditing(true)}
+            disabled={changesMade}
+            onClick={() => setIsEditing(!isEditing)}
             className='btn edit-data'
           >
-            Edit
+            {isEditing ? 'Cancel' : 'Edit'}
           </Button>
-          <Button type='primary' htmlType='submit' disabled={!isEditing}>
+          <Button type='primary' htmlType='submit' disabled={!changesMade}>
             Submit
           </Button>
-          <Button onClick={resetData} disabled={!isEditing}>
+          <Button onClick={resetData} disabled={!changesMade}>
             Revert
           </Button>
           {!params.id && (
@@ -102,6 +102,6 @@ const UserForm = ({ user }: UserFormProps) => {
       </div>
     </Form>
   );
-};
+});
 
 export default UserForm;

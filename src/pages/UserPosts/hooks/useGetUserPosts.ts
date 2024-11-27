@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import customFetch from "../../../utils/axios";
+import { useEffect, useState } from 'react';
+import customFetch from '../../../utils/axios';
 
 export const useGetUserPosts = (id: number) => {
   const [isLoading, setIsLoading] = useState(false);

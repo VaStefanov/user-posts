@@ -1,28 +1,19 @@
-import { createSlice, Dispatch } from "@reduxjs/toolkit";
-import { RootState } from "../store/store";
-import { UserData } from "../types";
-import customFetch from "../../utils/axios";
-
-type UsersState = {
-  isLoading: boolean;
-  isUsersFetched: boolean;
-  isUserDataFetched: boolean;
-  error: string;
-  users: UserData[];
-  userData: UserData | null;
-};
+import { createSlice, Dispatch } from '@reduxjs/toolkit';
+import { RootState } from '../../shared/store/store';
+import customFetch from '../../utils/axios';
+import { UsersState } from './types';
 
 const initialState: UsersState = {
   isLoading: false,
   isUsersFetched: false,
   isUserDataFetched: false,
-  error: "",
+  error: '',
   users: [],
   userData: null,
 };
 
 const usersSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {
     fetchUsersInit(state) {
@@ -35,7 +26,6 @@ const usersSlice = createSlice({
     },
     fetchUsersFailure(state, { payload }) {
       state.isLoading = false;
-      state.isUsersFetched = false;
       state.error = payload;
     },
     fetchUserByIdInit(state) {
@@ -43,22 +33,31 @@ const usersSlice = createSlice({
     },
     fetchUserByIdSuccess(state, { payload }) {
       state.isLoading = false;
-      state.isUserDataFetched = true;
       state.userData = payload;
     },
     fetchUserByIdFailure(state, { payload }) {
       state.isLoading = false;
-      state.isUserDataFetched = false;
+      state.isUsersFetched = false;
       state.error = payload;
     },
     editUser(state, { payload }) {
       const newUsers = state.users?.map((user) => {
         if (user.id === payload.id) {
-          user = { ...payload };
+          user = {
+            ...user,
+            username: payload.username,
+            email: payload.email,
+            address: {
+              ...user.address,
+              street: payload.street,
+              suite: payload.suite,
+              city: payload.city,
+            },
+          };
         }
         return user;
       });
-      state.users = [...newUsers];
+      state.users = newUsers;
     },
   },
 });
@@ -75,24 +74,23 @@ export const { editUser } = usersSlice.actions;
 export default usersSlice.reducer;
 
 export const selectUsersState = (state: RootState) => state.users;
-export const selectUsersFetched = (state: RootState) =>
-  state.users.isUsersFetched;
-export const selectUserDataFetched = (state: RootState) =>
-  state.users.isUserDataFetched;
-export const selectUserDataState = (state: RootState) => state.users.userData;
 export const selectUserById = (id: number) => (state: RootState) =>
   state.users.users.find((user) => user.id === id);
 
-export const fetchUsers = () => async (dispatch: Dispatch) => {
-  const url = "users";
-  dispatch(fetchUsersInit());
-  try {
-    const { data } = await customFetch.get(url);
-    dispatch(fetchUsersSuccess(data));
-  } catch (error) {
-    dispatch(fetchUsersFailure(error));
-  }
-};
+export const fetchUsers =
+  () => async (dispatch: Dispatch, getState: () => RootState) => {
+    const url = 'users';
+    const isFetched = getState().users.isUsersFetched;
+    if (isFetched) return;
+
+    dispatch(fetchUsersInit());
+    try {
+      const { data } = await customFetch.get(url);
+      dispatch(fetchUsersSuccess(data));
+    } catch (error) {
+      dispatch(fetchUsersFailure(error));
+    }
+  };
 
 export const fetchUserById =
   (id: string | undefined) => async (dispatch: Dispatch) => {

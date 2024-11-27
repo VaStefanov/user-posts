@@ -1,8 +1,8 @@
-import { CaretRightOutlined } from "@ant-design/icons";
-import { Collapse, theme } from "antd";
-import { CSSProperties } from "react";
-import { UserData } from "../../../shared/types";
-import UserForm from "../../../shared/features/UserForm";
+import { CaretRightOutlined } from '@ant-design/icons';
+import { Collapse, theme } from 'antd';
+import { CSSProperties } from 'react';
+import { UserData } from '../../../shared/types';
+import UserForm from '../../../shared/features/UserForm';
 
 type UserProps = {
   user: UserData;
@@ -12,11 +12,11 @@ const User = ({ user }: UserProps) => {
   const { token } = theme.useToken();
 
   const panelStyle: React.CSSProperties = {
-    maxWidth: "none",
+    maxWidth: 'none',
     marginBottom: 24,
     background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
-    border: "none",
+    border: 'none',
   };
 
   const getItems = (panelStyle: CSSProperties) => {

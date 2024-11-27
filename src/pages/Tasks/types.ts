@@ -48,3 +48,9 @@ export type renderFilterType = {
   options?: {}[] | undefined;
   onChange: (e: unknown) => void;
 };
+
+export type initialState = {
+  completed?: boolean | null;
+  title?: string | null;
+  userId?: number | null;
+};

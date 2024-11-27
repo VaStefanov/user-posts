@@ -16,8 +16,6 @@ export const getColumns = () => [
   {
     dataIndex: 'completed',
     title: 'completed',
-    render: (a: boolean) => (
-      <Switch defaultChecked={a} onChange={(e) => console.log(a)} />
-    ),
+    render: (value: boolean) => <Switch defaultChecked={value} />,
   },
 ];

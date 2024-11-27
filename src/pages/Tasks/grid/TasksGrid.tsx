@@ -1,9 +1,9 @@
-import { useTasksContext } from '../TasksContext';
 import { Table, TablePaginationConfig } from 'antd';
-import { getColumns } from './columns';
 import { setPaginationState, updateTaskStatus } from '../TasksSlice';
-import { useAppDispatch } from '../../../redux-hooks';
 import Loading from '../../../shared/components/Loading';
+import { useAppDispatch } from '../../../redux-hooks';
+import { useTasksContext } from '../TasksContext';
+import { getColumns } from './columns';
 
 const TasksGrid = () => {
   const { tasksState: tasks } = useTasksContext();

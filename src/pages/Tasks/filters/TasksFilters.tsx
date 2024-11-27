@@ -1,21 +1,11 @@
-import { Button, Col, Form, Row, Space } from 'antd';
 import { CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
-
+import { Button, Col, Form, Row, Space } from 'antd';
+import { resetPaginationState, setActiveFilters } from '../TasksSlice';
+import { useAppDispatch } from '../../../redux-hooks';
 import { tasksFilters } from './filters';
 import { renderFilter } from '../utils';
-import { useAppDispatch } from '../../../redux-hooks';
-import {
-  resetActiveFilters,
-  resetPaginationState,
-  setActiveFilters,
-} from '../TasksSlice';
+import { initialState } from '../types';
 import { useState } from 'react';
-
-type initialState = {
-  completed?: boolean | null;
-  title?: string | null;
-  userId?: number | null;
-};
 
 const initialValues = {
   completed: null,
@@ -30,11 +20,8 @@ const TasksFilters = () => {
   const dispatch = useAppDispatch();
 
   const onSearch = () => {
-    dispatch(resetActiveFilters());
-    dispatch(resetPaginationState());
     dispatch(setActiveFilters(state));
-    form.resetFields();
-    setState(initialValues);
+    dispatch(resetPaginationState());
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -52,6 +39,7 @@ const TasksFilters = () => {
     form.resetFields();
     setState(initialValues);
   };
+
   return (
     <>
       <Form

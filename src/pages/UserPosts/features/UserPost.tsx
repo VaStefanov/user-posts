@@ -1,59 +1,52 @@
-import { DeleteOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
-import { Card, Form, Input, Popconfirm, Row } from "antd";
-import { useState } from "react";
-import customFetch from "../../../utils/axios";
-import { UserPosts } from "../types";
+import { Card, Form, Row } from 'antd';
+import { useState } from 'react';
+import { UserPosts } from '../types';
+import TitleForm from './TitleForm';
+import BodyForm from './BodyForm';
+import { ConfirmEdit, DeletePost, StartEdit } from '../actions';
 
-const UserPost = ({ title, body, userId, id, handleDeletePost }: UserPosts) => {
+const UserPost = ({ title, body, id, handleDeletePost, userId }: UserPosts) => {
   const [titleText, setTitleText] = useState(title);
   const [bodyText, setBodyText] = useState(body);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
-  const { TextArea } = Input;
 
-  const titleForm = (
-    <Form name={`user_form-${titleText}`} form={form}>
-      <Input value={titleText} onChange={(e) => setTitleText(e.target.value)} />
-    </Form>
-  );
+  const titleProps = {
+    form,
+    titleText,
+    setTitleText,
+  };
+  const bodyProps = {
+    form,
+    bodyText,
+    setBodyText,
+  };
 
-  const bodyForm = (
-    <Form name={`user_form-${bodyText}`} form={form}>
-      <TextArea
-        value={bodyText}
-        autoSize={{ minRows: 3, maxRows: 5 }}
-        onChange={(e) => setBodyText(e.target.value)}
-      />
-    </Form>
-  );
-
-  const onEditPost = () => {
-    if (!isEditing) return;
-    setIsEditing(false);
+  const confirmEditProps = {
+    setTitleText,
+    setBodyText,
+    id,
+    isEditing,
+    userId,
+    setIsEditing,
+    titleText,
+    bodyText,
   };
 
   const actions: React.ReactNode[] = [
-    <EditOutlined key="edit" onClick={() => setIsEditing(true)} />,
-    <CheckOutlined key="check" onClick={onEditPost} />,
-    <Popconfirm
-      title="You will delete this post"
-      description="Are you sure to delete this post?"
-      onConfirm={() => handleDeletePost(id)}
-      okText="Yes"
-      cancelText="No"
-    >
-      <DeleteOutlined key="trash" />
-    </Popconfirm>,
+    <StartEdit setIsEditing={setIsEditing} />,
+    <ConfirmEdit {...confirmEditProps} />,
+    <DeletePost handleDeletePost={handleDeletePost} id={id} />,
   ];
 
   return (
-    <Row style={{ padding: "10px" }}>
+    <Row style={{ padding: '10px' }}>
       <Card
-        title={isEditing ? titleForm : titleText}
+        title={isEditing ? <TitleForm {...titleProps} /> : titleText}
         actions={actions}
         style={{ width: 600 }}
       >
-        {isEditing ? bodyForm : <p>{bodyText}</p>}
+        {isEditing ? <BodyForm {...bodyProps} /> : <p>{bodyText}</p>}
       </Card>
     </Row>
   );

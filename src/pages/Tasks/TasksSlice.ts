@@ -1,8 +1,8 @@
 import { createSlice, Dispatch } from '@reduxjs/toolkit';
+import { initialTasksSliceState, paginationOptions, Task } from './types';
 import { RootState } from '../../shared/store/store';
 import customFetch from '../../utils/axios';
 import { filterData } from './utils';
-import { initialTasksSliceState, paginationOptions, Task } from './types';
 
 const initialState: initialTasksSliceState = {
   tasks: [],
