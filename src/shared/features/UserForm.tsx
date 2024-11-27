@@ -1,10 +1,9 @@
-import { Button, Col, Form, Input, Row, Space } from 'antd';
+import { Button, Form, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { memo, useState } from 'react';
 import { editUser } from '../../pages/Users/usersSlice';
 import { UserData, UserFormFields } from '../types';
 import { useAppDispatch } from '../../redux-hooks';
-import { validateFields } from './validation';
 import InputWrapper from '../components/InputWrapper';
 
 type UserFormProps = {
@@ -65,7 +64,7 @@ const UserForm = memo(({ user }: UserFormProps) => {
     >
       <Row gutter={30}>
         {Object.keys(userData).map((field: string) => {
-          return <InputWrapper field={field} {...inputProps} />;
+          return <InputWrapper key={field} field={field} {...inputProps} />;
         })}
       </Row>
       <div style={{ textAlign: 'right', marginTop: '15px' }}>

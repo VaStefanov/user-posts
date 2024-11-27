@@ -15,7 +15,7 @@ const InputWrapper = ({
     setError(false);
   }, [isEditing]);
   return (
-    <Col span={8} key={field} style={formStyle}>
+    <Col span={8} style={formStyle}>
       <Form.Item
         label={field.replace('_', ' ')}
         name={field}
