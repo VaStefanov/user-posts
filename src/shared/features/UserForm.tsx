@@ -4,12 +4,12 @@ import { memo, useState } from 'react';
 import { editUser } from '../../pages/Users/usersSlice';
 import { UserData, UserFormFields } from '../types';
 import { useAppDispatch } from '../../redux-hooks';
+import { validateFields } from './validation';
+import InputWrapper from '../components/InputWrapper';
 
 type UserFormProps = {
   user: UserData;
 };
-
-const requiredFields = ['username', 'email', 'street', 'suite', 'city'];
 
 const UserForm = memo(({ user }: UserFormProps) => {
   const [form] = Form.useForm();
@@ -28,6 +28,7 @@ const UserForm = memo(({ user }: UserFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
   const [userData, setUserData] = useState(fields);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const formStyle: React.CSSProperties = {
     maxWidth: 'none',
@@ -37,8 +38,14 @@ const UserForm = memo(({ user }: UserFormProps) => {
   const resetData = () => {
     setUserData(userData);
     form.setFieldsValue(userData);
-    setIsEditing(false);
     setChangesMade(false);
+  };
+
+  const inputProps = {
+    formStyle,
+    isEditing,
+    setChangesMade,
+    setHasError,
   };
 
   return (
@@ -55,27 +62,10 @@ const UserForm = memo(({ user }: UserFormProps) => {
       }}
       variant={!isEditing ? 'borderless' : 'outlined'}
       style={{ padding: '25px' }}
-      onChange={() => setChangesMade(true)}
     >
       <Row gutter={30}>
         {Object.keys(userData).map((field: string) => {
-          return (
-            <Col span={8} key={field} style={formStyle}>
-              <Form.Item
-                label={field.replace('_', ' ')}
-                name={field}
-                layout='vertical'
-                rules={[{ required: requiredFields.includes(field) }]}
-                style={{ minHeight: '35px' }}
-              >
-                <Input
-                  name={field}
-                  style={{ pointerEvents: !isEditing ? 'none' : 'all' }}
-                  required={requiredFields.includes(field)}
-                />
-              </Form.Item>
-            </Col>
-          );
+          return <InputWrapper field={field} {...inputProps} />;
         })}
       </Row>
       <div style={{ textAlign: 'right', marginTop: '15px' }}>
@@ -87,7 +77,11 @@ const UserForm = memo(({ user }: UserFormProps) => {
           >
             {isEditing ? 'Cancel' : 'Edit'}
           </Button>
-          <Button type='primary' htmlType='submit' disabled={!changesMade}>
+          <Button
+            type='primary'
+            htmlType='submit'
+            disabled={!changesMade || hasError}
+          >
             Submit
           </Button>
           <Button onClick={resetData} disabled={!changesMade}>
