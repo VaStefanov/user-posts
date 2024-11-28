@@ -5,12 +5,10 @@ import UserForm from '../../shared/features/UserForm';
 import Loading from '../../shared/components/Loading';
 import UserPost from './features/UserPost';
 import Error from '../Error/Error';
-import { useState } from 'react';
-import customFetch from '../../utils/axios';
+import { memo } from 'react';
 
-const UserPosts = () => {
-  const { userPosts, userData, isLoading } = useUserPostsContext();
-  const [posts, setPosts] = useState(userPosts);
+const UserPosts = memo(() => {
+  const { posts, userData, isLoading } = useUserPostsContext();
   const { token } = theme.useToken();
 
   if (isLoading) {
@@ -22,18 +20,6 @@ const UserPosts = () => {
   }
 
   const noUserPosts = <Row style={{ padding: '10px' }}>User has no posts</Row>;
-
-  const handleDeletePost = async (id: string) => {
-    const url = `posts/${id}`;
-    try {
-      const { data } = await customFetch.delete(url);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-    const newPosts = posts.filter((post) => post.id !== id);
-    setPosts(newPosts);
-  };
 
   return (
     <Row align='middle' justify='center'>
@@ -64,18 +50,12 @@ const UserPosts = () => {
           {posts.length === 0
             ? noUserPosts
             : posts.map((post) => {
-                return (
-                  <UserPost
-                    {...post}
-                    key={post.id}
-                    handleDeletePost={handleDeletePost}
-                  />
-                );
+                return <UserPost {...post} key={post.id} />;
               })}
         </Row>
       </Flex>
     </Row>
   );
-};
+});
 
 export default UserPosts;

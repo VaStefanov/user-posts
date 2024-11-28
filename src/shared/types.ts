@@ -30,3 +30,11 @@ export type UserFormFields = {
   suite: string;
   city: string;
 };
+
+export type UserFormErrorFields = {
+  username: boolean;
+  email: boolean;
+  street: boolean;
+  suite: boolean;
+  city: boolean;
+};

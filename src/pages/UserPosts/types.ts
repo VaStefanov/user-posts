@@ -1,11 +1,13 @@
+import { Dispatch, SetStateAction } from 'react';
 import { UserData } from '../../shared/types';
+import { DeletePostArgs } from './hooks/useDeleteUserPost';
+import { EditPostArgs } from './hooks/useEditUserPost';
 
-export type UserPosts = {
-  userId?: string;
+export type UserPost = {
+  userId: string;
   id: string;
   title: string;
   body: string;
-  handleDeletePost: (id: string) => void;
 };
 
 export type PostInput = {
@@ -15,8 +17,26 @@ export type PostInput = {
 
 export type UserPostsState = {
   userData: UserData;
-  userPosts: UserPosts[];
+  posts: UserPost[];
   isLoading: boolean;
+  deletePost: ({ id, onDeleteSuccess }: DeletePostArgs) => void;
+  onDeleteSuccess: (id: string) => void;
+  onEditSuccess: (data: UserPost) => void;
+  editPost: ({
+    id,
+    userId,
+    titleText,
+    bodyText,
+    onEditSuccess,
+  }: EditPostArgs) => void;
+};
+
+export type EditUserState = {
+  id: string;
+  userId: string;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+  titleText: string;
+  bodyText: string;
 };
 
 export type UserPostsProviderProps = {

@@ -25,12 +25,12 @@ const TasksFilters = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (typeof e === 'object') {
+    if (typeof e === 'object' && e !== null) {
       setState({ ...state, title: e.target.value });
     } else if (typeof e === 'string') {
       const isCompleted = e === 'Completed';
       setState({ ...state, completed: isCompleted });
-    } else if (typeof e === 'number') {
+    } else if (typeof e === 'number' || e === null) {
       setState({ ...state, userId: e });
     }
   };

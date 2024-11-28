@@ -1,21 +1,26 @@
 import { Col, Input, Form } from 'antd';
-import { validateFields } from '../features/validation';
-import { useEffect, useState } from 'react';
+
+type InputWrapperProps = {
+  field: string;
+  isEditing: boolean;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error: boolean;
+};
 
 const InputWrapper = ({
   field,
-  formStyle,
   isEditing,
-  setChangesMade,
-  setHasError,
-}: any) => {
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    setError(false);
-  }, [isEditing]);
+  handleChange,
+  error,
+}: InputWrapperProps) => {
   return (
-    <Col span={8} style={formStyle}>
+    <Col
+      span={8}
+      style={{
+        maxWidth: 'none',
+        marginBottom: 30,
+      }}
+    >
       <Form.Item
         label={field.replace('_', ' ')}
         name={field}
@@ -24,15 +29,8 @@ const InputWrapper = ({
       >
         <Input
           name={field}
-          style={{ pointerEvents: !isEditing ? 'none' : 'all' }}
-          onChange={(e: any) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const hasErrors = validateFields(e.target.value);
-            setHasError(hasErrors);
-            setError(hasErrors);
-            setChangesMade(true);
-          }}
+          disabled={!isEditing}
+          onChange={(e) => handleChange(e)}
         />
       </Form.Item>
       <span

@@ -1,5 +1,5 @@
 import { Flex, Row, theme } from 'antd';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useAppDispatch } from '../../redux-hooks';
 import TasksFilters from './filters/TasksFilters';
 import TasksGrid from './grid/TasksGrid';
@@ -9,7 +9,7 @@ import {
   resetTasksState,
 } from './TasksSlice';
 
-const Tasks = () => {
+const Tasks = memo(() => {
   const { token } = theme.useToken();
   const dispatch = useAppDispatch();
 
@@ -51,6 +51,6 @@ const Tasks = () => {
       </Flex>
     </Row>
   );
-};
+});
 
 export default Tasks;

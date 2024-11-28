@@ -41,17 +41,18 @@ const usersSlice = createSlice({
       state.error = payload;
     },
     editUser(state, { payload }) {
+      const { id, userData } = payload;
       const newUsers = state.users?.map((user) => {
-        if (user.id === payload.id) {
+        if (user.id === id) {
           user = {
             ...user,
-            username: payload.username,
-            email: payload.email,
+            username: userData.username,
+            email: userData.email,
             address: {
               ...user.address,
-              street: payload.street,
-              suite: payload.suite,
-              city: payload.city,
+              street: userData.street,
+              suite: userData.suite,
+              city: userData.city,
             },
           };
         }

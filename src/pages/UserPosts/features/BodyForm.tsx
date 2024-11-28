@@ -1,4 +1,4 @@
-import { Form, FormInstance, Input } from 'antd';
+import { FormInstance, Input } from 'antd';
 
 type BodyFormProps = {
   form: FormInstance;
@@ -6,16 +6,14 @@ type BodyFormProps = {
   setBodyText: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const BodyForm = ({ form, bodyText, setBodyText }: BodyFormProps) => {
+const BodyForm = ({ bodyText, setBodyText }: BodyFormProps) => {
   const { TextArea } = Input;
   return (
-    <Form name={bodyText} form={form}>
-      <TextArea
-        value={bodyText}
-        autoSize={{ minRows: 3, maxRows: 5 }}
-        onChange={(e) => setBodyText(e.target.value)}
-      />
-    </Form>
+    <TextArea
+      value={bodyText}
+      autoSize={{ minRows: 3, maxRows: 5 }}
+      onChange={(e) => setBodyText(e.target.value)}
+    />
   );
 };
 

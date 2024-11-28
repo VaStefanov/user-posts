@@ -1,4 +1,4 @@
-import { Form, FormInstance, Input } from 'antd';
+import { FormInstance, Input } from 'antd';
 import React from 'react';
 
 type TitleFormProps = {
@@ -7,11 +7,9 @@ type TitleFormProps = {
   setTitleText: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const TitleForm = ({ form, titleText, setTitleText }: TitleFormProps) => {
+const TitleForm = ({ titleText, setTitleText }: TitleFormProps) => {
   return (
-    <Form name={titleText} form={form}>
-      <Input value={titleText} onChange={(e) => setTitleText(e.target.value)} />
-    </Form>
+    <Input value={titleText} onChange={(e) => setTitleText(e.target.value)} />
   );
 };
 

@@ -2,12 +2,21 @@ import { Button, Form, Row, Space } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { memo, useState } from 'react';
 import { editUser } from '../../pages/Users/usersSlice';
-import { UserData, UserFormFields } from '../types';
+import { UserData, UserFormErrorFields, UserFormFields } from '../types';
 import { useAppDispatch } from '../../redux-hooks';
 import InputWrapper from '../components/InputWrapper';
+import { validateFields } from './validation';
 
 type UserFormProps = {
   user: UserData;
+};
+
+const initialErrorState = {
+  username: false,
+  email: false,
+  street: false,
+  suite: false,
+  city: false,
 };
 
 const UserForm = memo(({ user }: UserFormProps) => {
@@ -27,24 +36,32 @@ const UserForm = memo(({ user }: UserFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [changesMade, setChangesMade] = useState(false);
   const [userData, setUserData] = useState(fields);
-  const [hasError, setHasError] = useState<boolean>(false);
-
-  const formStyle: React.CSSProperties = {
-    maxWidth: 'none',
-    marginBottom: 30,
-  };
+  const [errors, setErrors] = useState<UserFormErrorFields>(initialErrorState);
 
   const resetData = () => {
-    setUserData(userData);
-    form.setFieldsValue(userData);
+    setUserData(fields);
+    form.setFieldsValue(fields);
+    setErrors(initialErrorState);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setChangesMade(true);
+    setUserData({ ...userData, [e.currentTarget.name]: e.currentTarget.value });
+  };
+
+  const handleSubmit = () => {
+    const validateResult = validateFields(userData, setErrors);
+    if (validateResult) return;
+    const obj = { id, userData };
+    dispatch(editUser(obj));
+    setIsEditing(false);
     setChangesMade(false);
   };
 
   const inputProps = {
-    formStyle,
     isEditing,
-    setChangesMade,
-    setHasError,
+    handleChange,
   };
 
   return (
@@ -52,19 +69,20 @@ const UserForm = memo(({ user }: UserFormProps) => {
       name={username}
       form={form}
       initialValues={fields}
-      onFinish={(formValues) => {
-        const obj = { id, ...formValues };
-
-        dispatch(editUser(obj));
-        setIsEditing(false);
-        setChangesMade(false);
-      }}
+      onFinish={handleSubmit}
       variant={!isEditing ? 'borderless' : 'outlined'}
       style={{ padding: '25px' }}
     >
       <Row gutter={30}>
         {Object.keys(userData).map((field: string) => {
-          return <InputWrapper key={field} field={field} {...inputProps} />;
+          return (
+            <InputWrapper
+              key={field}
+              field={field}
+              error={errors[field as keyof UserFormErrorFields]}
+              {...inputProps}
+            />
+          );
         })}
       </Row>
       <div style={{ textAlign: 'right', marginTop: '15px' }}>
@@ -76,11 +94,7 @@ const UserForm = memo(({ user }: UserFormProps) => {
           >
             {isEditing ? 'Cancel' : 'Edit'}
           </Button>
-          <Button
-            type='primary'
-            htmlType='submit'
-            disabled={!changesMade || hasError}
-          >
+          <Button type='primary' htmlType='submit' disabled={!changesMade}>
             Submit
           </Button>
           <Button onClick={resetData} disabled={!changesMade}>
