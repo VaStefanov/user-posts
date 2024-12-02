@@ -1,18 +1,21 @@
 import { Card, Form, Row } from 'antd';
 import { useState } from 'react';
-import { UserPost as UserPostType } from '../types';
 import TitleForm from './TitleForm';
 import BodyForm from './BodyForm';
 import { EditFlow, DeletePost } from '../actions';
 
-const UserPost = ({
-  title: titleText,
-  body: bodyText,
-  id,
-  userId,
-}: UserPostType) => {
-  const [title, setTitle] = useState(titleText);
-  const [body, setBody] = useState(bodyText);
+type UserPostProps = {
+  post: {
+    userId: string;
+    id: string;
+    title: string;
+    body: string;
+  };
+};
+
+const UserPost = ({ post }: UserPostProps) => {
+  const [title, setTitle] = useState(post.title);
+  const [body, setBody] = useState(post.body);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
 
@@ -25,26 +28,26 @@ const UserPost = ({
     setBody,
   };
 
-  const post = {
-    id,
-    userId,
+  const updatedPost = {
+    id: post.id,
+    userId: post.userId,
     title,
     body,
   };
 
-  const editProps = { post, isEditing, setIsEditing };
+  const editProps = { updatedPost, isEditing, setIsEditing };
 
-  const actions = [<EditFlow {...editProps} />, <DeletePost id={id} />];
+  const actions = [<EditFlow {...editProps} />, <DeletePost id={post.id} />];
 
   return (
     <Row style={{ padding: '10px' }}>
       <Form form={form}>
         <Card
-          title={isEditing ? <TitleForm {...titleProps} /> : titleText}
+          title={isEditing ? <TitleForm {...titleProps} /> : post.title}
           actions={actions}
           style={{ width: 600 }}
         >
-          {isEditing ? <BodyForm {...bodyProps} /> : bodyText}
+          {isEditing ? <BodyForm {...bodyProps} /> : post.body}
         </Card>
       </Form>
     </Row>

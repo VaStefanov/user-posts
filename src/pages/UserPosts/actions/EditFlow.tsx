@@ -3,12 +3,16 @@ import { useUserPostsContext } from '../UserPostsContext';
 import { UserPost } from '../types';
 
 type EditFlowProps = {
-  post: UserPost;
+  updatedPost: UserPost;
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const EditFlow = ({ post, isEditing, setIsEditing }: EditFlowProps) => {
+const EditFlow = ({
+  updatedPost: post,
+  isEditing,
+  setIsEditing,
+}: EditFlowProps) => {
   const { editPost } = useUserPostsContext();
 
   const handleEdit = async () => {

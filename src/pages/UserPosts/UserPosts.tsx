@@ -49,7 +49,7 @@ const UserPosts = () => {
           {posts.length === 0
             ? noUserPosts
             : posts.map((post) => {
-                return <UserPost {...post} key={post.id} />;
+                return <UserPost post={post} key={post.id} />;
               })}
         </Row>
       </Flex>

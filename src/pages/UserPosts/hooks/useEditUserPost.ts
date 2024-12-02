@@ -12,18 +12,11 @@ export const useEditUserPost = () => {
 
   const handleEditPost = useCallback(
     async ({ post, onSuccessfulEdit }: EditPostArgs) => {
-      const { id, userId, title, body } = post;
-      const url = `posts/${id}`;
+      const url = `posts/${post.id}`;
       setIsLoading(true);
-      const requestObj = {
-        id,
-        userId,
-        title,
-        body,
-      };
 
       try {
-        const { data } = await customFetch.put(url, requestObj);
+        const { data } = await customFetch.put(url, post);
         onSuccessfulEdit(data);
       } catch (error) {
         console.log(error);
