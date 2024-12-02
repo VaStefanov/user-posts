@@ -5,9 +5,8 @@ import UserForm from '../../shared/features/UserForm';
 import Loading from '../../shared/components/Loading';
 import UserPost from './features/UserPost';
 import Error from '../Error/Error';
-import { memo } from 'react';
 
-const UserPosts = memo(() => {
+const UserPosts = () => {
   const { posts, userData, isLoading } = useUserPostsContext();
   const { token } = theme.useToken();
 
@@ -56,6 +55,6 @@ const UserPosts = memo(() => {
       </Flex>
     </Row>
   );
-});
+};
 
 export default UserPosts;

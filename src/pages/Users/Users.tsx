@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import Loading from '../../shared/components/Loading';
 import { fetchUsers, selectUsersState } from './usersSlice';
 import User from './components/User';
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 
-const Users = memo(() => {
+const Users = () => {
   const { users, isLoading } = useAppSelector(selectUsersState);
 
   const dispatch = useAppDispatch();
@@ -31,6 +31,6 @@ const Users = memo(() => {
       </Flex>
     </Row>
   );
-});
+};
 
 export default Users;
