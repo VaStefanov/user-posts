@@ -43,7 +43,7 @@ export type RenderFilterType = {
   name: string;
   type: string;
   value: string | number | boolean | null;
-  options?: Record<string, string>;
+  options?: Record<string, string>[];
   onChange: (e: any) => void;
 };
 
