@@ -38,19 +38,17 @@ export type initialTasksSliceState = {
   };
 };
 
-type value = string | number | boolean | null;
-
-export type renderFilterType = {
-  label: string;
+export type RenderFilterType = {
+  label?: string;
   name: string;
   type: string;
-  value: value;
-  options?: {}[] | undefined;
-  onChange: (e: unknown) => void;
+  value: string | number | boolean | null;
+  options?: Record<string, string>;
+  onChange: (e: any) => void;
 };
 
-export type initialState = {
-  completed?: boolean | null;
-  title?: string | null;
-  userId?: number | null;
+export type FilterOptions = {
+  completed: boolean | null;
+  title: string | null;
+  userId: number | null;
 };

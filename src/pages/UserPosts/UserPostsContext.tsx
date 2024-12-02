@@ -3,7 +3,12 @@ import { useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../redux-hooks';
 import { fetchUsers, selectUserById } from '../Users/usersSlice';
 import { useGetUserPosts } from './hooks/useGetUserPosts';
-import { UserPostsState, UserPostsProviderProps, UserPost } from './types';
+import {
+  UserPostsState,
+  UserPostsProviderProps,
+  UserPost,
+  EditUserState,
+} from './types';
 import { useEditUserPost } from './hooks/useEditUserPost';
 import { useDeleteUserPost } from './hooks/useDeleteUserPost';
 
@@ -14,8 +19,8 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
   const userData = useAppSelector(selectUserById(Number(id)));
   const { userPosts, isLoading } = useGetUserPosts(Number(id));
   const [posts, setPosts] = useState<UserPost[]>(userPosts!);
-  const { editPost } = useEditUserPost();
-  const { deletePost } = useDeleteUserPost();
+  const { handleEditPost } = useEditUserPost();
+  const { handleDeletePost } = useDeleteUserPost();
 
   const dispatch = useAppDispatch();
 
@@ -31,12 +36,11 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
 
   if (!userData || !posts) return null;
 
-  const onDeleteSuccess = (id?: string) => {
-    const newPosts = posts.filter((post) => post.id !== id);
-    setPosts(newPosts);
+  const editPost = async (post: EditUserState) => {
+    await handleEditPost({ post, onSuccessfulEdit });
   };
 
-  const onEditSuccess = (data: UserPost) => {
+  const onSuccessfulEdit = (data: EditUserState) => {
     const newPosts: UserPost[] = posts.map((post) => {
       if (post.id === data.id) {
         post.title = data.title;
@@ -47,13 +51,20 @@ export const UserPostsProvider = ({ children }: UserPostsProviderProps) => {
     setPosts(newPosts);
   };
 
+  const deletePost = async (id: string) => {
+    await handleDeletePost({ id, onSuccessfulPostDelete });
+  };
+
+  const onSuccessfulPostDelete = (id: string) => {
+    const newPosts = posts.filter((post) => post.id !== id);
+    setPosts(newPosts);
+  };
+
   const value = {
     userData,
-    posts: posts,
+    posts,
     isLoading,
     deletePost,
-    onDeleteSuccess,
-    onEditSuccess,
     editPost,
   };
 

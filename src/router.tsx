@@ -4,7 +4,6 @@ import Users from './pages/Users/Users';
 import Error from './pages/Error/Error';
 import UserPosts from './pages/UserPosts/UserPosts';
 import Tasks from './pages/Tasks/Tasks';
-import { TasksProvider } from './pages/Tasks/TasksContext';
 import HeaderLayout from './shared/components/HeaderLayout';
 
 export const router = createBrowserRouter([
@@ -29,11 +28,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'tasks',
-        element: (
-          <TasksProvider>
-            <Tasks />
-          </TasksProvider>
-        ),
+        element: <Tasks />,
         errorElement: <Error />,
       },
     ],

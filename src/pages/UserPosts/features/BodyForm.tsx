@@ -1,18 +1,17 @@
-import { FormInstance, Input } from 'antd';
+import { Input } from 'antd';
 
 type BodyFormProps = {
-  form: FormInstance;
-  bodyText: string;
-  setBodyText: React.Dispatch<React.SetStateAction<string>>;
+  body: string;
+  setBody: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const BodyForm = ({ bodyText, setBodyText }: BodyFormProps) => {
+const BodyForm = ({ body, setBody }: BodyFormProps) => {
   const { TextArea } = Input;
   return (
     <TextArea
-      value={bodyText}
+      value={body}
       autoSize={{ minRows: 3, maxRows: 5 }}
-      onChange={(e) => setBodyText(e.target.value)}
+      onChange={(e) => setBody(e.target.value)}
     />
   );
 };

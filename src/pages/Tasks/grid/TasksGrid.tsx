@@ -1,27 +1,43 @@
 import { Table, TablePaginationConfig } from 'antd';
-import { setPaginationState, updateTaskStatus } from '../TasksSlice';
+import {
+  fetchTasks,
+  selectTasksState,
+  setPaginationState,
+  updateTaskStatus,
+} from '../TasksSlice';
 import Loading from '../../../shared/components/Loading';
-import { useAppDispatch } from '../../../redux-hooks';
-import { useTasksContext } from '../TasksContext';
+import { useAppDispatch, useAppSelector } from '../../../redux-hooks';
 import { getColumns } from './columns';
+import { useEffect, useState } from 'react';
+import { filterData } from '../utils';
 
 const TasksGrid = () => {
-  const { tasksState: tasks } = useTasksContext();
   const dispatch = useAppDispatch();
+  const { tasks, isLoading, activeFilters } = useAppSelector(selectTasksState);
   const columns = getColumns();
-
+  const [tasksState, setTasksState] = useState(tasks);
   const onTableChange = (paginationOptions: TablePaginationConfig) => {
     dispatch(setPaginationState(paginationOptions.current));
   };
 
-  if (tasks.length === 0) return <Loading />;
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (tasks.length === 0 || Object.keys(activeFilters).length === 0) return;
+    const newState = filterData(activeFilters, tasks);
+    setTasksState(newState);
+  }, [activeFilters, tasks]);
+
+  if (tasks.length === 0 || isLoading) return <Loading />;
 
   return (
     <Table
       pagination={{
         showSizeChanger: false,
         position: ['bottomCenter'],
-        total: tasks.length,
+        total: tasksState.length,
         pageSize: 10,
       }}
       onRow={(record) => {
@@ -34,7 +50,7 @@ const TasksGrid = () => {
       }}
       rowKey='id'
       columns={columns}
-      dataSource={tasks}
+      dataSource={tasksState}
       style={{ width: '100%' }}
       onChange={onTableChange}
     />

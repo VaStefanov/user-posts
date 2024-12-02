@@ -3,38 +3,38 @@ import { useState } from 'react';
 import { UserPost as UserPostType } from '../types';
 import TitleForm from './TitleForm';
 import BodyForm from './BodyForm';
-import { ConfirmEdit, DeletePost, StartEdit } from '../actions';
+import { EditFlow, DeletePost } from '../actions';
 
-const UserPost = ({ title, body, id, userId }: UserPostType) => {
-  const [titleText, setTitleText] = useState(title);
-  const [bodyText, setBodyText] = useState(body);
+const UserPost = ({
+  title: titleText,
+  body: bodyText,
+  id,
+  userId,
+}: UserPostType) => {
+  const [title, setTitle] = useState(titleText);
+  const [body, setBody] = useState(bodyText);
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
 
   const titleProps = {
-    form,
-    titleText,
-    setTitleText,
+    title,
+    setTitle,
   };
   const bodyProps = {
-    form,
-    bodyText,
-    setBodyText,
+    body,
+    setBody,
   };
 
-  const confirmEditProps = {
+  const post = {
     id,
     userId,
-    setIsEditing,
-    titleText,
-    bodyText,
+    title,
+    body,
   };
 
-  const actions: React.ReactNode[] = [
-    <StartEdit setIsEditing={setIsEditing} />,
-    <ConfirmEdit {...confirmEditProps} />,
-    <DeletePost id={id} />,
-  ];
+  const editProps = { post, isEditing, setIsEditing };
+
+  const actions = [<EditFlow {...editProps} />, <DeletePost id={id} />];
 
   return (
     <Row style={{ padding: '10px' }}>

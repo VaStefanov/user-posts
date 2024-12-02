@@ -7,12 +7,16 @@ type DeletePostProps = {
 };
 
 const DeletePost = ({ id }: DeletePostProps) => {
-  const { deletePost, onDeleteSuccess } = useUserPostsContext();
+  const { deletePost } = useUserPostsContext();
+
+  const handleDelete = async () => {
+    await deletePost(id);
+  };
   return (
     <Popconfirm
       title='You will delete this post'
       description='Are you sure to delete this post?'
-      onConfirm={() => deletePost({ id, onDeleteSuccess })}
+      onConfirm={handleDelete}
       okText='Yes'
       cancelText='No'
     >

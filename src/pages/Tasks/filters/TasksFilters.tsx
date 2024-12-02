@@ -4,7 +4,7 @@ import { resetPaginationState, setActiveFilters } from '../TasksSlice';
 import { useAppDispatch } from '../../../redux-hooks';
 import { tasksFilters } from './filters';
 import { renderFilter } from '../utils';
-import { initialState } from '../types';
+import { FilterOptions } from '../types';
 import { useState } from 'react';
 
 const initialValues = {
@@ -14,7 +14,7 @@ const initialValues = {
 };
 
 const TasksFilters = () => {
-  const [state, setState] = useState<initialState>(initialValues);
+  const [state, setState] = useState<FilterOptions>(initialValues);
   const filters = tasksFilters();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
@@ -58,7 +58,7 @@ const TasksFilters = () => {
                     type: filter.type,
                     options: filter?.options,
                     name: filter.name,
-                    value: state[filter.name as keyof initialState],
+                    value: state[filter.name as keyof FilterOptions],
                     onChange,
                   })}
                 </Form.Item>

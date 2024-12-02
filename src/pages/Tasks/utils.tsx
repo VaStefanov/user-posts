@@ -1,6 +1,6 @@
 import { Input, InputNumber, Select } from 'antd';
 import { ReactNode } from 'react';
-import { filters, renderFilterType, Task } from './types';
+import { filters, RenderFilterType, Task } from './types';
 
 export const renderFilter = ({
   type,
@@ -8,7 +8,7 @@ export const renderFilter = ({
   name,
   value,
   onChange,
-}: renderFilterType | any): ReactNode => {
+}: RenderFilterType | any): ReactNode => {
   switch (type) {
     case 'select':
       return (
