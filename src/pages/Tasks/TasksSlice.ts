@@ -13,11 +13,7 @@ const initialState: initialTasksSliceState = {
     pageSize: 10,
     total: 0,
   },
-  activeFilters: {
-    completed: null,
-    title: null,
-    userId: null,
-  },
+  activeFilters: {},
 };
 
 const tasksSlice = createSlice({

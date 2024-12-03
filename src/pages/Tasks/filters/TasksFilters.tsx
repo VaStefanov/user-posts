@@ -4,17 +4,11 @@ import { resetPaginationState, setActiveFilters } from '../TasksSlice';
 import { useAppDispatch } from '../../../redux-hooks';
 import { tasksFilters } from './filters';
 import { renderFilter } from '../utils';
-import { FilterOptions } from '../types';
 import { useState } from 'react';
-
-const initialValues = {
-  completed: null,
-  title: null,
-  userId: null,
-};
+import { FilterOptions } from '../types';
 
 const TasksFilters = () => {
-  const [state, setState] = useState<FilterOptions>(initialValues);
+  const [state, setState] = useState<FilterOptions>({});
   const filters = tasksFilters();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
@@ -24,12 +18,13 @@ const TasksFilters = () => {
     dispatch(resetPaginationState());
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement> | boolean | (number | null)
+  ): void => {
     if (typeof e === 'object' && e !== null) {
       setState({ ...state, title: e.target.value });
-    } else if (typeof e === 'string') {
-      const isCompleted = e === 'Completed';
-      setState({ ...state, completed: isCompleted });
+    } else if (typeof e === 'boolean') {
+      setState({ ...state, completed: e });
     } else if (typeof e === 'number' || e === null) {
       setState({ ...state, userId: e });
     }
@@ -37,7 +32,7 @@ const TasksFilters = () => {
 
   const onClear = () => {
     form.resetFields();
-    setState(initialValues);
+    setState({});
   };
 
   return (
@@ -56,9 +51,9 @@ const TasksFilters = () => {
                 <Form.Item name={filter.type}>
                   {renderFilter({
                     type: filter.type,
-                    options: filter?.options,
+                    options: filter.options,
                     name: filter.name,
-                    value: state[filter.name as keyof FilterOptions],
+                    value: state[filter.name] as any,
                     onChange,
                   })}
                 </Form.Item>

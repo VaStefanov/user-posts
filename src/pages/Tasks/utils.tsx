@@ -1,42 +1,44 @@
 import { Input, InputNumber, Select } from 'antd';
 import { ReactNode } from 'react';
-import { filters, RenderFilterType, Task } from './types';
+import {
+  filters,
+  ISelectFilterType,
+  ITextInputFilterType,
+  INumberInputFilterType,
+  Task,
+} from './types';
 
-export const renderFilter = ({
-  type,
-  options,
-  name,
-  value,
-  onChange,
-}: RenderFilterType | any): ReactNode => {
-  switch (type) {
+export const renderFilter = (
+  data: ISelectFilterType | ITextInputFilterType | INumberInputFilterType
+): ReactNode => {
+  switch (data.type) {
     case 'select':
       return (
-        <Select
-          value={value}
-          options={options}
+        <Select<boolean, { value: boolean; label: string }>
+          value={data.value}
+          options={data.options}
           style={{ width: '250px' }}
-          onChange={onChange}
+          onChange={data.onChange}
         />
       );
     case 'number':
       return (
-        <InputNumber
+        <InputNumber<number>
           style={{ width: '250px' }}
-          onChange={onChange}
-          name={name}
-          value={value}
-          type={type}
+          onChange={data.onChange}
+          name={data.name}
+          value={data.value}
+          type={data.type}
         />
       );
     case 'text':
       return (
         <Input
           style={{ width: '250px' }}
-          onChange={onChange}
-          name={name}
-          value={value}
-          type={type}
+          onChange={data.onChange}
+          name={data.name}
+          value={data.value}
+          type={data.type}
         />
       );
     default:

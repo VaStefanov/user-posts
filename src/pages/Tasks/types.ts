@@ -11,9 +11,9 @@ export type TasksState = {
 };
 
 export type filters = {
-  completed: boolean | null;
-  title: string | null;
-  userId: string | null;
+  completed?: boolean;
+  title?: string;
+  userId?: string;
 };
 
 export type paginationOptions = {
@@ -31,24 +31,35 @@ export type initialTasksSliceState = {
     pageSize: number;
     total: number;
   };
-  activeFilters: {
-    completed: boolean | null;
-    title: string | null;
-    userId: string | null;
-  };
+  activeFilters: {};
 };
 
-export type RenderFilterType = {
-  label?: string;
+export interface IRenderFilterType {
   name: string;
-  type: string;
-  value: string | number | boolean | null;
-  options?: Record<string, string>[];
-  onChange: (e: any) => void;
-};
+}
+
+export interface ISelectFilterType extends IRenderFilterType {
+  value: boolean | undefined | null;
+  type: 'select';
+  options?: { value: boolean; label: string }[] | undefined;
+  onChange: (e: boolean) => void;
+}
+
+export interface ITextInputFilterType extends IRenderFilterType {
+  value: string | undefined;
+  type: 'text';
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface INumberInputFilterType extends IRenderFilterType {
+  value: number | undefined | null;
+  type: 'number';
+  onChange: (e: number | null) => void;
+}
 
 export type FilterOptions = {
-  completed: boolean | null;
-  title: string | null;
-  userId: number | null;
+  completed?: boolean;
+  title?: string;
+  userId?: number | null;
+  status?: boolean;
 };

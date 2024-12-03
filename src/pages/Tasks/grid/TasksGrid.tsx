@@ -16,6 +16,7 @@ const TasksGrid = () => {
   const { tasks, isLoading, activeFilters } = useAppSelector(selectTasksState);
   const columns = getColumns();
   const [tasksState, setTasksState] = useState(tasks);
+
   const onTableChange = (paginationOptions: TablePaginationConfig) => {
     dispatch(setPaginationState(paginationOptions.current));
   };
@@ -25,7 +26,7 @@ const TasksGrid = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (tasks.length === 0 || Object.keys(activeFilters).length === 0) return;
+    if (tasks.length === 0) return;
     const newState = filterData(activeFilters, tasks);
     setTasksState(newState);
   }, [activeFilters, tasks]);
@@ -50,7 +51,7 @@ const TasksGrid = () => {
       }}
       rowKey='id'
       columns={columns}
-      dataSource={tasksState}
+      dataSource={tasksState.length === 0 ? tasks : tasksState}
       style={{ width: '100%' }}
       onChange={onTableChange}
     />
